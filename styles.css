@@ -1,0 +1,47 @@
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background: #ddd;
+    color: black;
+  }
+}
+
+#syncReply, #asyncReply {
+  font-family: sans-serif;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: .5rem;
+  background-color: #ddd;
+  box-shadow: inset 0 0 2px #aaa;
+}
+
+#sendSyncMsgBtn, #sendAsyncMsgBtn {
+  color: rebeccapurple;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: .5rem;
+  background-color: #ccc;
+  box-shadow: 2px 2px 2px #ccc;
+}
+
+#select-directory {
+  color: rebeccapurple;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: .5rem;
+  background-color: #ccc;
+  box-shadow: 2px 2px 2px #ccc;
+  display: block;
+  margin: 1rem;
+}
+
+textarea{
+  width: 90%;
+}

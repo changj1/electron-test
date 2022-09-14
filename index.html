@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <!-- <title>Hello from Electron renderer!</title> -->
+   
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+</head>
+
+<body>
+    <h1>Hello from Electron renderer!+++</h1>
+    <p>👋👋</p>
+    <p id="info"></p>
+    <p id="theme-toggle"></p>
+    <p id="doGeneration"></p>
+    Current value: <strong id="counter">0</strong>
+
+    <button id="toggle-dark-mode">Dark mode selection</button>
+
+    <p id="syncReply">Awaiting response</p>
+    <button id="sendSyncMsgBtn">Ping Main Process</button>
+
+    <p id="asyncReply">Awaiting async response</p>
+    <button id="sendAsyncMsgBtn">Ping Main Process Async</button>
+
+    <p></p>
+    <button id="select-directory">Choose a file</button>
+    <p></p>
+    <textarea id="selectedItem"></textarea>
+
+    <!-- <p></p>
+    <button id="select-directory2">Choose a file</button>
+    <p>(one way that does not return a value to Renderer)</p>
+    <p>So we need a function for sending a value from main to renderer</p>
+    <textarea id="selectedItem2"></textarea> -->
+
+    <p></p>
+    <button id="save-file">Save</button>
+
+</body>
+<script src="./renderer.js"></script>
+
+</html>
