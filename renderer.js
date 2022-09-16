@@ -21,6 +21,7 @@ window.electronAPI.dogenerated((_event, value) => {
   doGeneration.innerText = value
 })
 
+
 //(main -> renderer one way)
 const counter = document.getElementById('counter')
 window.electronAPI.onUpdateCounter((_event, value) => {
@@ -77,5 +78,15 @@ window.electronAPI.getFileName((_event, value) => {
 const saveFileBtn = document.getElementById('save-file')
 saveFileBtn.addEventListener('click', () => {
   const result = electronToMain.sendSave()
+})
+
+//Capturing window(one way)
+document.getElementById('captureBtn').addEventListener('click', () => {
+  const result = electronToMain.capturePNG()
+})
+
+//Printing window(one way)
+document.getElementById('printPDFBtn').addEventListener('click', () => {
+  const result = electronToMain.printPDF()
 })
 

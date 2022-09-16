@@ -48,4 +48,31 @@ const template = [
   }
 ]
 
-module.exports = [doGenerateIcon, template]
+const template2 = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Reload',
+        accelerator : 'Ctrl+R',
+        role: 'reload'
+      },
+      {
+        label: 'Select All',
+        accelerator : 'Ctrl+A',
+        role: 'selectAll'
+      },
+      {
+        type : 'separator'
+      },
+    ]
+  },
+  {
+    label: 'Item',
+    submenu: [{
+      label: 'One More Menu Item'
+    }]
+  }
+]
+
+module.exports = [doGenerateIcon, template, template2]

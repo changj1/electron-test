@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer, shell } = require('electron')
 
 //two-way method Main <-> renderer
 contextBridge.exposeInMainWorld('versions', {
@@ -20,6 +20,8 @@ contextBridge.exposeInMainWorld('versions', {
 contextBridge.exposeInMainWorld('electronToMain', {
     sendDir2: () => ipcRenderer.send('open-directory-dialog2'),
     sendSave: () => ipcRenderer.send('save-file-dialog'),//(2)
+    capturePNG : () => ipcRenderer.send('capture-window'),
+    printPDF : () => ipcRenderer.send('print-pdf'),
 })
 
 
@@ -31,3 +33,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onUpdateCounter: (callback) => ipcRenderer.on('update-counter', callback),
     getFileName: (callback) => ipcRenderer.on('selectedItems', callback)
 })
+
