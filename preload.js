@@ -33,4 +33,3 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onUpdateCounter: (callback) => ipcRenderer.on('update-counter', callback),
     getFileName: (callback) => ipcRenderer.on('selectedItems', callback)
 })
-

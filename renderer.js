@@ -1,3 +1,4 @@
+
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault()
   console.log('this is context menu');
@@ -18,6 +19,7 @@ const doGeneration = document.getElementById('doGeneration')
 
 // dogenerate function are from main through preload(main -> renderer one way)
 window.electronAPI.dogenerated((_event, value) => {
+  shell.beep()
   doGeneration.innerText = value
 })
 
@@ -89,4 +91,3 @@ document.getElementById('captureBtn').addEventListener('click', () => {
 document.getElementById('printPDFBtn').addEventListener('click', () => {
   const result = electronToMain.printPDF()
 })
-

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, nativeTheme, dialog, protocol, webContents } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, nativeTheme, dialog, protocol, webContents, shell } = require('electron')
 const path = require('path')
 const template = require('./mainsupport/menu')[1]
 const template2 = require('./mainsupport/menu')[2]
@@ -8,7 +8,6 @@ const fileWriter = require('./mainsupport/fileReader')[1]
 const readFile = require('./mainsupport/fileReader')[2]
 const url = require('url')
 const fs = require('fs')
-const { electron } = require('process')
 
 // fileReader('./assets/filetest.txt')
 // readFile('./assets/filetest.txt')
@@ -21,7 +20,23 @@ let win, secondWindow, windowToCapture, windowToPrint;
 
 const createWindow = (fileStrPage, options) => {
   nativeTheme.themeSource = 'dark'
-  win = new BrowserWindow(options)
+  win = new BrowserWindow({
+    backgroundColor: '#FFF', // DEFAULT: '#FFF',
+
+    width: 1000, // DEFAULT: 800
+    height: 800, // DEFAULT: 600
+    minWidth: 1000, // DEFAULT: 0
+    minHeight: 800, // DEFAULT: 0
+    resizable: true, // DEFAULT: true
+    movable: true, // DEFAULT: true
+    alwaysOnTop: false, // DEFAULT: false
+    // frame: false, // DEFAULT: true
+    // titleBarStyle: 'hidden' // DEFAULT: 'default'
+    // transparent: true // DEFAULT: false
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    },
+  })
 
   ipcMain.handle('chang', () => 'ok Im here')
   ipcMain.handle('dark-mode:toggle', () => {
@@ -113,7 +128,7 @@ const createWindow = (fileStrPage, options) => {
     let bounds = windowToCapture.getBounds()
     const image = await windowToCapture.webContents.capturePage({
       x: 0, y: 0, width: bounds.width, height: bounds.
-      height
+        height
     })
     imageCaptured(image)
   })
@@ -126,7 +141,7 @@ const createWindow = (fileStrPage, options) => {
 
     console.log(fileName);
 
-    let filePath =fileName.filePath + '-' + windowToCapture.getTitle() + '.png'
+    let filePath = fileName.filePath + '-' + windowToCapture.getTitle() + '.png'
     let png = image.toPNG()
     fs.writeFileSync(filePath, png)
   }
@@ -143,12 +158,12 @@ const createWindow = (fileStrPage, options) => {
       title: 'Print file...',
       buttonLabel: "PdfFileName",
     })
-    
-    let filePath =fileName.filePath + '-' + windowToPrint.getTitle() + '.pdf'
-    if(error){
+
+    let filePath = fileName.filePath + '-' + windowToPrint.getTitle() + '.pdf'
+    if (error) {
       console.error(error.message);
     }
-    if(data){
+    if (data) {
       fs.writeFile(filePath, data, error => {
         console.error(error);
       })
@@ -163,33 +178,52 @@ const createWindow = (fileStrPage, options) => {
 
   win.webContents.openDevTools()
 
-  win.webContents.on('did-finish-load', event => {
-    console.log('did-finish-load : ', BrowserWindow.fromId(0))
+  // let filePath1 = path.join(__dirname,'/assets/filetest.txt')
+  // shell.showItemInFolder(filePath1)
+
+  win.webContents.on('did-finish-load', (e) => {
+
+    // let filePath2 = app.getAppPath() + '\\assets\\filetest.txt'
+    // shell.showItemInFolder(filePath2)
+
+    // shell.openPath(filePath2)
+    // const searchmethod = BrowserWindow.fromId(e.sender.id)
+    // console.log('did-finish-load : ', BrowserWindow.fromId(e.sender.id))
+
+    // let filePath3 = 'file:///' + app.getAppPath() +'/support.html'
+    // console.log(filePath3);
+    // shell.openExternal(filePath3) 
+    
   })
   // console.log('webContents.id', webContents.fromId(event));
 
 }
 
-// const createWindow2 = (fileStrPage, options) => {
-//   nativeTheme.themeSource = 'dark'
-//   secondWindow = new BrowserWindow(options)
+const createWindow2 = (fileStrPage, options) => {
+  nativeTheme.themeSource = 'dark'
+  secondWindow = new BrowserWindow(options)
 
-//   secondWindow.loadURL(url.format({
-//     pathname: path.join(__dirname, fileStrPage),
-//     protocol: 'file:',
-//     slashes: true
-//   }))
+  secondWindow.loadURL(url.format({
+    pathname: path.join(__dirname, fileStrPage),
+    protocol: 'file:',
+    slashes: true
+  }))
 
-//   // secondWindow.webContents.openDevTools()
-// }
+  secondWindow.webContents.openDevTools()
+}
 
 const addSubMenu = [
   {
-    click: () => win.webContents.send('update-counter', 1),
+    click: () => {
+      return win.webContents.send('update-counter', 1)
+    },
     label: 'Increment',
   },
   {
-    click: () => win.webContents.send('update-counter', -1),
+    click: () => {
+      shell.beep()
+      return win.webContents.send('update-counter', -1)
+    },
     label: 'Decrement',
   }
 ]
@@ -221,34 +255,18 @@ app.whenReady().then(
     let menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
 
-    createWindow('index.html', {
-      backgroundColor: '#FFF', // DEFAULT: '#FFF',
-
-      width: 1000, // DEFAULT: 800
-      height: 800, // DEFAULT: 600
-      minWidth: 1000, // DEFAULT: 0
-      minHeight: 800, // DEFAULT: 0
-      resizable: true, // DEFAULT: true
-      movable: true, // DEFAULT: true
-      alwaysOnTop: false, // DEFAULT: false
-      // frame: false, // DEFAULT: true
-      // titleBarStyle: 'hidden' // DEFAULT: 'default'
-      // transparent: true // DEFAULT: false
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
-      },
-    })
+    // createWindow('index.html')
 
     // let menu2 = Menu.buildFromTemplate(template2)
     // Menu.setApplicationMenu(menu2)
 
-    // secondWindow = createWindow2('./support.html', {
-    //   width: 400, height: 400, title: 'SECOND',
-    //   icon: path.join(__dirname, './assets/capturedImage.png'),
-    //   webPreferences: {
-    //     preload: path.join(__dirname, 'preload2.js')
-    //   },
-    // })
+    createWindow2('./support.html', {
+      width: 800, height: 600, title: 'SECOND',
+      icon: path.join(__dirname, './assets/vector-picture-icon.jpg'),
+      webPreferences: {
+        preload: path.join(__dirname, 'preload2.js')
+      },
+    })
   },
 )
 
@@ -256,4 +274,4 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-
+// shell.beep()
